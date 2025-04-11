@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Skills Survey</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>What Makes a Good Programmer?</h1>
+        <p>This survey aims to understand the key skills and qualities that define a "good programmer." It will take 3-5 minutes to complete, and your responses will remain anonymous. If you're interested in participating in a follow-up survey, you can share your email at the end.</p>
+
+        <form id="survey-form">
+            <!-- Your Role -->
+            <h2>Roles and Skills</h2>
+            <p><b>What is your primary role?</b></p>
+            <div id="role-container">
+                <label><input type="radio" name="role" value="Junior Developer"> Junior Developer</label>
+                <label><input type="radio" name="role" value="Senior Developer"> Senior Developer</label>
+                <label><input type="radio" name="role" value="Tech Lead/Manager"> Tech Lead/Manager</label>
+                <label><input type="radio" name="role" value="Freelancer"> Freelancer</label>
+                <label>
+                    <input type="radio" name="role" value="Other" id="other-role-radio"> Other
+                </label>
+                <input type="text" id="other-role" placeholder="Please specify..." style="display: none;">
+            </div>
+
+            <p><b>How many years of professional programming experience do you have?</b></p>
+            <div id="experience-container">
+                <label><input type="radio" name="experience" value="0-2 Years"> 0-2 Years</label>
+                <label><input type="radio" name="experience" value="3-5 Years"> 3-5 Years</label>
+                <label><input type="radio" name="experience" value="4-6 Years"> 4-6 Years</label>
+                <label><input type="radio" name="experience" value="7+ Years"> 7+ Years</label>
+            </div>
+
+            <!-- Skill Selection -->
+            <p><b>Which skills do you think are most important for a good programmer?</b</p>
+            <div id="skills-container">
+                <label><input type="checkbox" class="skill" value="Problem-Solving"> Problem-Solving</label>
+                <label><input type="checkbox" class="skill" value="Debugging"> Debugging</label>
+                <label><input type="checkbox" class="skill" value="AI-Assisted Development"> AI-Assisted Development</label>
+            </div>
+
+            <!-- Add New Skill -->
+            <div class="new-skill-section">
+                <input type="text" id="new-skill" placeholder="Enter a new skill">
+                <button type="button" id="add-skill">Add Skill</button>
+            </div>
+
+            <!-- Skill Description & Method Input -->
+            <div id="description-box" class="hidden">
+                <h3 id="skill-title"></h3>
+                <textarea id="method-input" placeholder="Enter a method to verify this skill..."></textarea>
+                <button type="button" id="save-method">Save Method</button>
+            </div>
+
+            <!-- Saved Methods List -->
+            <h3>Saved Methods</h3>
+            <ul id="methods-list"></ul>
+            <br>
+
+            <p><b>Do you think AI-assisted tools impact what makes a "good programmer"? </b></p>
+            <div id="YesNo-container">
+                <label><input type="radio" name="YesNo" value="Yes"> Yes</label>
+                <label><input type="radio" name="YesNo" value="No"> No</label>
+            </div>
+            
+            <p><b>If yes, in what ways do you think AI-assisted tools impact what makes a good programmer?</b></p>
+            <label>
+                    <input type="text" name="role" id="other-role-radio">
+            </label>
+
+            <p><b>In your opinion, what is more important?</b></p>
+            <div id="YesNo-container">
+                <label><input type="radio" name="YesNo"> Strong technical skills</label>
+                <label><input type="radio" name="YesNo"> Strong problem-solving & adaptability skills</label>
+                <label><input type="radio" name="YesNo"> A balance of both</label>
+            </div>
+
+            <p><b>Would you be interested in participating in a follow-up survey? If yes, please share your email.</b></p>
+            <label>
+                    <input type="text" name="role" id="other-role-radio">
+            </label>
+
+            <p><b>Thank you for your time! Your responses will shape this research. If you have any additional thoughts, feel free to share them below.</b></p>
+            <label>
+                    <input type="text" name="role" id="other-role-radio">
+            </label>
+
+        </form>
+    </div> 
+
+    <script src="script.js"></script>
+</body>
+</html>
