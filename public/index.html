@@ -1,86 +1,186 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Programming-Skills Survey</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Programming-Skills Survey</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>What Makes a Good Programmer?</h1>
+      <p>
+        This survey aims to understand the key skills and qualities that define
+        a "good programmer." It will take 3-5 minutes to complete, and your
+        responses will remain anonymous. If you're interested in participating
+        in a follow-up survey, you can share your email at the end.
+      </p>
 
-  <div class="container">
-    <h1>What Makes a Good Programmer?</h1>
-    <p>This survey aims to understand the key skills and qualities that define a "good programmer." It will take 3-5 minutes to complete, and your responses will remain anonymous. If you're interested in participating in a follow-up survey, you can share your email at the end.</p>
+      <form id="survey-form">
+        <!-- ─────────── Primary role ─────────── -->
+        <h2 class="question">What is your primary role?</h2>
+        <div id="role-container" class="options-group">
+          <label
+            ><input type="radio" name="role" value="Junior Developer" /><span
+              >Junior Developer</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="role" value="Senior Developer" /><span
+              >Senior Developer</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="role" value="Tech Lead/Manager" /><span
+              >Tech Lead / Manager</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="role" value="Freelancer" /><span
+              >Freelancer</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="role" value="Other" /><span
+              >Other</span
+            ></label
+          >
+        </div>
+        <input
+          id="role-other"
+          type="text"
+          placeholder="If 'Other', please specify"
+        />
 
-    <form id="survey-form">
+        <!-- ─────────── Experience ─────────── -->
+        <h2 class="question">
+          How many years of professional programming experience?
+        </h2>
+        <div id="experience-container" class="options-group">
+          <label
+            ><input type="radio" name="experience" value="0-2" /><span
+              >0 – 2 years</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="experience" value="3-5" /><span
+              >3 – 5 years</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="experience" value="4-6" /><span
+              >4 – 6 years</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="experience" value="7+" /><span
+              >7 + years</span
+            ></label
+          >
+        </div>
 
-      <!-- ─────────── Primary role ─────────── -->
-      <h2 class="question">What is your primary role?</h2>
-      <div id="role-container" class="options-group">
-        <label><input type="radio" name="role" value="Junior Developer"><span>Junior Developer</span></label>
-        <label><input type="radio" name="role" value="Senior Developer"><span>Senior Developer</span></label>
-        <label><input type="radio" name="role" value="Tech Lead/Manager"><span>Tech Lead / Manager</span></label>
-        <label><input type="radio" name="role" value="Freelancer"><span>Freelancer</span></label>
-        <label><input type="radio" name="role" value="Other"><span>Other</span></label>
-      </div>
-      <input id="role-other" type="text" placeholder="If 'Other', please specify" />
+        <!-- ─────────── Core skills ─────────── -->
+        <h2 class="question">
+          Which skills are most important for a good programmer?
+        </h2>
+        <div id="skills-container" class="options-group">
+          <label
+            ><input
+              type="checkbox"
+              class="skill"
+              value="Problem-Solving"
+            /><span>Problem-Solving</span></label
+          >
+          <label
+            ><input type="checkbox" class="skill" value="Debugging" /><span
+              >Debugging</span
+            ></label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="skill"
+              value="AI-Assisted Development"
+            /><span>AI-Assisted Development</span></label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="skill"
+              value="AI-Assisted Development"
+            /><span>Good Communication</span></label
+          >
+        </div>
 
-      <!-- ─────────── Experience ─────────── -->
-      <h2 class="question">How many years of professional programming experience?</h2>
-      <div id="experience-container" class="options-group">
-        <label><input type="radio" name="experience" value="0-2"><span>0 – 2 years</span></label>
-        <label><input type="radio" name="experience" value="3-5"><span>3 – 5 years</span></label>
-        <label><input type="radio" name="experience" value="4-6"><span>4 – 6 years</span></label>
-        <label><input type="radio" name="experience" value="7+"><span>7 + years</span></label>
-      </div>
+        <!-- verification boxes are injected here -->
+        <div id="description-container"></div>
 
-      <!-- ─────────── Core skills ─────────── -->
-      <h2 class="question">Which skills are most important for a good programmer?</h2>
-      <div id="skills-container" class="options-group">
-        <label><input type="checkbox" class="skill" value="Problem-Solving"><span>Problem-Solving</span></label>
-        <label><input type="checkbox" class="skill" value="Debugging"><span>Debugging</span></label>
-        <label><input type="checkbox" class="skill" value="AI-Assisted Development"><span>AI-Assisted Development</span></label>
-      </div>
+        <div class="new-skill-section">
+          <input id="new-skill" type="text" placeholder="Add another skill" />
+          <button type="button" id="add-skill">Add Skill</button>
+        </div>
 
-      <!-- verification boxes are injected here -->
-      <div id="description-container"></div>
+        <h3>Saved verification methods</h3>
+        <ul id="methods-list"></ul>
 
-      <div class="new-skill-section">
-        <input id="new-skill" type="text" placeholder="Add another skill" />
-        <button type="button" id="add-skill">Add Skill</button>
-      </div>
+        <!-- ─────────── AI impact ─────────── -->
+        <h2 class="question">
+          Do AI-assisted tools change what makes a programmer “good”?
+        </h2>
+        <div id="ai-impact-yn" class="options-group">
+          <label
+            ><input type="radio" name="aiImpact" value="Yes" /><span
+              >Yes</span
+            ></label
+          >
+          <label
+            ><input type="radio" name="aiImpact" value="No" /><span
+              >No</span
+            ></label
+          >
+        </div>
+        <input id="ai-impact-detail" type="text" placeholder="If yes, how?" />
 
-      <h3>Saved verification methods</h3>
-      <ul id="methods-list"></ul>
+        <!-- ─────────── Importance balance ─────────── -->
+        <h2 class="question">Which is more important?</h2>
+        <div id="importance-yn" class="options-group">
+          <label
+            ><input type="radio" name="importance" value="Technical" /><span
+              >Strong technical skills</span
+            ></label
+          >
+          <label
+            ><input
+              type="radio"
+              name="importance"
+              value="Problem-Solving"
+            /><span>Strong problem-solving & adaptability</span></label
+          >
+          <label
+            ><input type="radio" name="importance" value="Balanced" /><span
+              >A balance of both</span
+            ></label
+          >
+        </div>
 
-      <!-- ─────────── AI impact ─────────── -->
-      <h2 class="question">Do AI-assisted tools change what makes a programmer “good”?</h2>
-      <div id="ai-impact-yn" class="options-group">
-        <label><input type="radio" name="aiImpact" value="Yes"><span>Yes</span></label>
-        <label><input type="radio" name="aiImpact" value="No"><span>No</span></label>
-      </div>
-      <input id="ai-impact-detail" type="text" placeholder="If yes, how?" />
+        <!-- ─────────── Follow-up & notes ─────────── -->
+        <h2 class="question">
+          Interested in a follow-up survey? Leave your e-mail:
+        </h2>
+        <input
+          id="follow-up-email"
+          type="email"
+          placeholder="you@example.com"
+        />
 
-      <!-- ─────────── Importance balance ─────────── -->
-      <h2 class="question">Which is more important?</h2>
-      <div id="importance-yn" class="options-group">
-        <label><input type="radio" name="importance" value="Technical"><span>Strong technical skills</span></label>
-        <label><input type="radio" name="importance" value="Problem-Solving"><span>Strong problem-solving & adaptability</span></label>
-        <label><input type="radio" name="importance" value="Balanced"><span>A balance of both</span></label>
-      </div>
+        <h2 class="question">Any extra thoughts?</h2>
+        <input id="extra-thoughts" type="text" placeholder="Your Thoughts" />
 
-      <!-- ─────────── Follow-up & notes ─────────── -->
-      <h2 class="question">Interested in a follow-up survey? Leave your e-mail:</h2>
-      <input id="follow-up-email" type="email" placeholder="you@example.com" />
+        <button id="submit-btn" type="submit">Submit survey</button>
+      </form>
+    </div>
 
-      <h2 class="question">Any extra thoughts?</h2>
-      <input id="extra-thoughts" type="text" placeholder="Your Thoughts" />
-
-      <button id="submit-btn" type="submit">Submit survey</button>
-    </form>
-  </div>
-
-  <!-- main JS (ES-module) -->
-  <script type="module" src="script.js"></script>
-</body>
+    <!-- main JS (ES-module) -->
+    <script type="module" src="script.js"></script>
+  </body>
 </html>
