@@ -1,3 +1,12 @@
+## 🚀 Deployment
+
+To deploy the survey on any web server:
+
+- Run `npm run build` in the project root.  
+- This will generate a `/build` folder with all necessary static files.  
+- Upload the contents of the `/build` folder to any web server (e.g., Apache, Nginx, university server).  
+- The survey will work as a static website and connect to Firebase in real time — no backend setup is required.
+
 ## 🔍 How to View Survey Data (Firebase Access)
 
 You do NOT need to run Firebase locally to view results.
