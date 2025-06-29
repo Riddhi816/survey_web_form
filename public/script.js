@@ -5,8 +5,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebas
 import {
   getFirestore,
   collection,
+  doc,
+  setDoc,
+  updateDoc,
   addDoc,
+  getDoc,
   serverTimestamp,
+  arrayUnion,
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -23,7 +28,7 @@ const db = getFirestore(app);
 /* ──────────────────────────────────────────────────────────────
    2.  Dynamic-skill logic  (runs after DOM ready)
 ──────────────────────────────────────────────────────────────── */
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   /* ▸▸  cache nodes  ◂◂ */
   const roleOtherInput = document.getElementById("role-other");
   const skillsContainer = document.getElementById("skills-container");
@@ -31,6 +36,50 @@ document.addEventListener("DOMContentLoaded", () => {
   const addSkillButton = document.getElementById("add-skill");
   const descriptionHolder = document.getElementById("description-container");
   const methodsList = document.getElementById("methods-list");
+
+  try {
+    const skillDocRef = doc(db, "surveySkillList", "customSkills");
+    const skillSnapshot = await getDoc(skillDocRef);
+    const allSkills = [];
+
+    if (skillSnapshot.exists()) {
+      const skillArray = skillSnapshot.data().names || [];
+      skillArray.forEach((skill) => {
+        const label = document.createElement("label");
+        label.classList.add("skill-item");
+        label.innerHTML = `<input type="checkbox" class="skill" value="${skill}"> ${skill}`;
+        skillsContainer.appendChild(label);
+        allSkills.push(label); // store for collapse feature
+      });
+    }
+
+    // Collapse logic – show only first 10
+    const maxVisible = 6;
+    if (allSkills.length > maxVisible) {
+      allSkills.forEach((item, i) => {
+        if (i >= maxVisible) item.style.display = "none";
+      });
+
+      const toggleBtn = document.createElement("button");
+      toggleBtn.textContent = "Show All Skills";
+      toggleBtn.classList.add("toggle-skills");
+      let expanded = false;
+
+      toggleBtn.addEventListener("click", () => {
+        expanded = !expanded;
+        allSkills.forEach((item, i) => {
+          if (i >= maxVisible) item.style.display = expanded ? "block" : "none";
+        });
+        toggleBtn.textContent = expanded
+          ? "Show Less Skills"
+          : "Show All Skills";
+      });
+
+      skillsContainer.appendChild(toggleBtn);
+    }
+  } catch (err) {
+    console.error("Error loading skills:", err);
+  }
 
   /* ▸▸  global state  ◂◂ */
   window.methodsData = {}; // expose for Firebase payload
@@ -48,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
     box.className = "verification-box";
     box.dataset.skill = skill;
 
-    title.textContent = `Verification method for: ${skill}`;
+    title.textContent = `How would you verify this skill? Can you provide a method or a test for this: ${skill}`;
     textarea.value = window.methodsData[skill] || "";
     saveBtn.textContent = "Save";
     saveBtn.type = "button";
@@ -88,13 +137,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const newSkill = newSkillInput.value.trim();
     if (!newSkill) return;
 
+    // Prevent duplicate entries
+    if (document.querySelector(`.skill[value="${newSkill}"]`)) {
+      alert("Skill already exists.");
+      return;
+    }
+
     const label = document.createElement("label");
-    label.classList.add("skill-item");
-    label.innerHTML = `<input type="checkbox" class="skill" value="${newSkill}"> ${newSkill}`;
+    label.classList.add("skill-item", "custom-skill");
+    label.innerHTML = `
+    <input type="checkbox" class="skill" value="${newSkill}">
+    ${newSkill}
+    <button type="button" class="remove-skill" title="Remove">✕</button>
+  `;
     skillsContainer.appendChild(label);
+    wireSkillCheckboxes(); // reattach event listeners
+
+    // Handle removal before submission
+    label.querySelector(".remove-skill").addEventListener("click", () => {
+      label.remove();
+      selectedSkills.delete(newSkill);
+      delete window.methodsData[newSkill];
+      document.querySelector(`[data-skill="${newSkill}"]`)?.remove(); // remove verify box
+      updateMethodsList();
+    });
 
     newSkillInput.value = "";
-    wireSkillCheckboxes(); // attach listener to the new box
   });
 
   /* ---- update saved-methods list ---- */
@@ -129,10 +197,12 @@ const checked = (name) =>
 document.getElementById("survey-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const role =
-    checked("role") ||
-    document.getElementById("role-other").value.trim() ||
-    null;
+  const selectedRole = checked("role");
+  const roleOtherInput = document.getElementById("role-other");
+  const otherRoleText = roleOtherInput?.value.trim();
+
+  const role = selectedRole === "Other" ? otherRoleText : selectedRole || null;
+
   const experience = checked("experience");
   const aiImpact = checked("aiImpact") || checked("YesNo");
   const aiImpactText =
@@ -147,14 +217,14 @@ document.getElementById("survey-form").addEventListener("submit", async (e) => {
 
   if (
     !role ||
-    (role === "Other" && !otherRoleText) ||
+    (checked("role") === "Other" && !otherRoleText) ||
     !experience ||
     skills.length === 0 ||
     !aiImpact ||
     !importance
   ) {
     alert("Please fill in all required questions before submitting.");
-    return; 
+    return;
   }
 
   const payload = {
@@ -172,6 +242,30 @@ document.getElementById("survey-form").addEventListener("submit", async (e) => {
 
   try {
     await addDoc(collection(db, "surveyResponses"), payload);
+    console.log("Response saved:", payload);
+
+    // Save any new custom skills to Firestore before saving response
+    try {
+      const customSkills = [
+        ...document.querySelectorAll(".custom-skill .skill"),
+      ].map((cb) => cb.value);
+      const skillDocRef = doc(db, "surveySkillList", "customSkills");
+      const skillSnapshot = await getDoc(skillDocRef);
+
+      if (customSkills.length > 0) {
+        if (skillSnapshot.exists()) {
+          await updateDoc(skillDocRef, {
+            names: arrayUnion(...customSkills),
+          });
+        } else {
+          await setDoc(skillDocRef, {
+            names: customSkills,
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Failed to save custom skills:", err);
+    }
     alert("Thanks! Your response has been saved.");
     e.target.reset();
   } catch (err) {

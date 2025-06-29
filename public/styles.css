@@ -1,30 +1,30 @@
 :root {
-    --accent: #5b7cfa;
-    --accent-d: #4968e3;
-    --bg-body: #f6f8fb;
-    --bg-card: #fff;
-    --bg-light: #f9f9fb;
-    --border: #e1e5ee;
-    --text: #333;
-    --radius: 8px;
-    --font: "Inter", Arial, sans-serif;
+  --accent: #5b7cfa;
+  --accent-d: #4968e3;
+  --bg-body: #f6f8fb;
+  --bg-card: #fff;
+  --bg-light: #f9f9fb;
+  --border: #e1e5ee;
+  --text: #333;
+  --radius: 8px;
+  --font: "Inter", Arial, sans-serif;
 }
 
 /* reset & base */
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 html {
-    font-family: var(--font);
-    color: var(--text);
+  font-family: var(--font);
+  color: var(--text);
 }
 body {
-    margin: 0;
-    background: var(--bg-body);
-    display: flex;
-    justify-content: center;
+  margin: 0;
+  background: var(--bg-body);
+  display: flex;
+  justify-content: center;
 }
 
 /* card */
@@ -152,4 +152,16 @@ textarea:focus {
 }
 #submit-btn:hover {
   background: var(--accent-d);
+}
+
+.skill-item button.remove-skill {
+  margin-left: 6px;
+  background: none;
+  border: none;
+  color: red;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.skill-item:hover button.remove-skill {
+  display: inline;
 }
