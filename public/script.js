@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (skillSnapshot.exists()) {
       const skillArray = skillSnapshot.data().names || [];
+
       skillArray.forEach((skill) => {
         const label = document.createElement("label");
         label.classList.add("skill-item");
@@ -53,8 +54,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    // Collapse logic – show only first 10
-    const maxVisible = 6;
+    // Collapse logic – show only first 7
+    const maxVisible = 7;
     if (allSkills.length > maxVisible) {
       allSkills.forEach((item, i) => {
         if (i >= maxVisible) item.style.display = "none";
@@ -63,6 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const toggleBtn = document.createElement("button");
       toggleBtn.textContent = "Show All Skills";
       toggleBtn.classList.add("toggle-skills");
+      toggleBtn.style.marginTop = "10px";
       let expanded = false;
 
       toggleBtn.addEventListener("click", () => {
@@ -215,15 +217,40 @@ document.getElementById("survey-form").addEventListener("submit", async (e) => {
   const skills = Object.keys(window.methodsData);
   const verMethods = window.methodsData;
 
-  if (
-    !role ||
-    (checked("role") === "Other" && !otherRoleText) ||
-    !experience ||
-    skills.length === 0 ||
-    !aiImpact ||
-    !importance
-  ) {
-    alert("Please fill in all required questions before submitting.");
+  if (!role || (selectedRole === "Other" && !otherRoleText)) {
+    alert("❗ Please select or enter your role.");
+    return;
+  }
+
+  if (!experience) {
+    alert("❗ Please select your years of experience.");
+    return;
+  }
+
+  if (skills.length === 0) {
+    alert("❗ Please select at least one skill.");
+    return;
+  }
+
+  const missingMethods = skills.filter(
+    (skill) => !verMethods[skill] || verMethods[skill].trim() === ""
+  );
+  if (missingMethods.length > 0) {
+    alert(
+      "❗ Please enter a verification method for: " + missingMethods.join(", ")
+    );
+    return;
+  }
+
+  if (!aiImpact) {
+    alert(
+      "❗ Please indicate whether AI impacts what makes a good programmer."
+    );
+    return;
+  }
+
+  if (!importance) {
+    alert("❗ Please select what is more important.");
     return;
   }
 
