@@ -293,7 +293,7 @@ document.getElementById("survey-form").addEventListener("submit", async (e) => {
     } catch (err) {
       console.error("Failed to save custom skills:", err);
     }
-    alert("Thanks! Your response has been saved.");
+    window.location.href = "thankyou.html";
     e.target.reset();
   } catch (err) {
     console.error(err);
